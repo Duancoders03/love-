@@ -125,9 +125,14 @@
       // Tự động bật âm thanh khi người dùng click hoặc chạm màn hình lần đầu
       const audio = document.getElementById('bg-music');
 
+      alert("Hãy click vào giữa màn hình để có món quà bất ngờ nhé người đẹp ❤");
+     
       function unmuteAudio() {
         audio.muted = false;
+      
+
         audio.play();
+
         window.removeEventListener('click', unmuteAudio);
         window.removeEventListener('touchstart', unmuteAudio);
       }
