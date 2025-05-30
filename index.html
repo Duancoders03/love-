@@ -39,11 +39,9 @@
         pointer-events: none;
         text-shadow: 0 0 10px rgba(255, 155, 203, 0.7);
         will-change: transform, opacity;
-        /* Cỡ chữ responsive, nhỏ hơn trên mobile */
         font-size: clamp(8px, 2vw, 20px);
       }
 
-      /* Nếu muốn chỉnh riêng cho mobile có thể dùng media query */
       @media (max-width: 640px) {
         .word {
           font-size: clamp(6px, 3vw, 14px);
@@ -52,8 +50,14 @@
     </style>
   </head>
   <body>
+    <!-- Nhạc nền autoplay mute -->
+    <audio id="bg-music" autoplay loop muted>
+      <source src="Download.mp3" type="audio/mpeg" />
+      Trình duyệt của bạn không hỗ trợ thẻ audio.
+    </audio>
+
     <script>
-      // Tạo sao
+      // Tạo sao (tạo sao là tạo hiệu ứng sao nhấp nháy)
       const numStars = 150;
       for (let i = 0; i < numStars; i++) {
         const star = document.createElement("div");
@@ -73,7 +77,6 @@
         "Anh nhớ em", "Em là vì sao sáng", "Chờ em mãi mãi", "Em là ánh sáng của đời anh", "Anh thương em 💖"
       ];
 
-      // Nhiều chữ hơn trên mobile (ví dụ 40 chữ), 35 chữ desktop
       const numWords = window.innerWidth < 768 ? 40 : 35;
       const elements = [];
 
@@ -118,6 +121,19 @@
       animate();
 
       window.addEventListener("resize", () => location.reload());
+
+      // Tự động bật âm thanh khi người dùng click hoặc chạm màn hình lần đầu
+      const audio = document.getElementById('bg-music');
+
+      function unmuteAudio() {
+        audio.muted = false;
+        audio.play();
+        window.removeEventListener('click', unmuteAudio);
+        window.removeEventListener('touchstart', unmuteAudio);
+      }
+
+      window.addEventListener('click', unmuteAudio);
+      window.addEventListener('touchstart', unmuteAudio);
     </script>
   </body>
 </html>
