@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="icon" href="profile.jpg" />
+    <link rel="icon" href="profile.jpg" type="image/x-icon" />
+
+    <title>Love ❤</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      html, body {
+        margin: 0;
+        background: radial-gradient(ellipse at center, #0f0f23 0%, #000000 100%);
+        overflow: hidden;
+        height: 100%;
+        width: 100%;
+        perspective: 1000px;
+      }
+
+      .star {
+        position: absolute;
+        background: white;
+        border-radius: 50%;
+        opacity: 0.8;
+        animation: twinkle 2s infinite alternate;
+      }
+
+      @keyframes twinkle {
+        0% { opacity: 0.5; }
+        100% { opacity: 1; }
+      }
+
+      .word {
+        position: absolute;
+        color: #ff9bcb;
+        font-weight: bold;
+        user-select: none;
+        pointer-events: none;
+        text-shadow: 0 0 10px rgba(255, 155, 203, 0.7);
+        will-change: transform, opacity;
+        /* Cỡ chữ responsive, nhỏ hơn trên mobile */
+        font-size: clamp(8px, 2vw, 20px);
+      }
+
+      /* Nếu muốn chỉnh riêng cho mobile có thể dùng media query */
+      @media (max-width: 640px) {
+        .word {
+          font-size: clamp(6px, 3vw, 14px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      // Tạo sao
+      const numStars = 150;
+      for (let i = 0; i < numStars; i++) {
+        const star = document.createElement("div");
+        const size = Math.random() * 2 + 1;
+        star.className = "star";
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.top = `${Math.random() * 100}%`;
+        star.style.left = `${Math.random() * 100}%`;
+        star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+        document.body.appendChild(star);
+      }
+
+      // Chữ tỏ tình
+      const words = [
+        "Anh yêu em", "Em là duy nhất", "Mãi bên em", "Trái tim anh thuộc về em", "Yêu em đến cuối đời",
+        "Anh nhớ em", "Em là vì sao sáng", "Chờ em mãi mãi", "Em là ánh sáng của đời anh", "Anh thương em 💖"
+      ];
+
+      // Nhiều chữ hơn trên mobile (ví dụ 40 chữ), 35 chữ desktop
+      const numWords = window.innerWidth < 768 ? 40 : 35;
+      const elements = [];
+
+      for (let i = 0; i < numWords; i++) {
+        const el = document.createElement("div");
+        el.className = "word";
+        el.textContent = words[Math.floor(Math.random() * words.length)];
+        document.body.appendChild(el);
+
+        const data = {
+          el,
+          x: Math.random() * window.innerWidth,
+          y: Math.random() * window.innerHeight,
+          z: Math.random() * 800 - 400,
+          speedX: (Math.random() - 0.5) * 1.8,
+          speedY: (Math.random() - 0.5) * 1.8,
+          speedZ: (Math.random() - 0.5) * 1.8,
+        };
+        elements.push(data);
+      }
+
+      function animate() {
+        elements.forEach((data) => {
+          data.x += data.speedX;
+          data.y += data.speedY;
+          data.z += data.speedZ;
+
+          if (data.x < 0 || data.x > window.innerWidth) data.speedX *= -1;
+          if (data.y < 0 || data.y > window.innerHeight) data.speedY *= -1;
+          if (data.z < -400 || data.z > 400) data.speedZ *= -1;
+
+          const scale = 1 + data.z / 400;
+          const opacity = Math.max(0.5, Math.min(1, 0.7 + (data.z / 800)));
+
+          data.el.style.transform = `translate3d(${data.x}px, ${data.y}px, ${data.z}px) scale(${scale})`;
+          data.el.style.opacity = opacity;
+        });
+
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+
+      window.addEventListener("resize", () => location.reload());
+    </script>
+  </body>
+</html>
